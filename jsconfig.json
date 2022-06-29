@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@moon/common/*": ["common/*"],
+      "@moon/features/*": ["features/*"],
+      "@moon/pages/*": ["pages/*"],
+      "@moon/assets/*": ["assets/*"],
+      "@moon/hooks/*": ["hooks/*"],
+      "@moon/utils/*": ["utils/*"],
+      "@moon/app/*": ["app/*"]
+    }
+  }
+}
