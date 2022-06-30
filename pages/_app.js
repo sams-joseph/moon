@@ -1,11 +1,23 @@
 import { useEffect } from "react";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { store } from "@moon/app/store";
 
 import "../styles/globals.css";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@moon/app/firebase";
+import { login } from "@moon/features/Auth/authSlice";
 
-function MyApp({ Component, pageProps }) {
+const App = ({ Component, pageProps }) => {
+  const dispatch = useDispatch();
+  const [user, loading, error] = useAuthState(auth);
+
   const getLayout = Component.getLayout || ((page) => page);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(login(JSON.parse(JSON.stringify(user))));
+    }
+  }, [user, dispatch]);
 
   useEffect(() => {
     if (localStorage.getItem("color-theme") === "dark") {
@@ -15,8 +27,14 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
+  return getLayout(<Component {...pageProps} />);
+};
+
+function MyApp({ Component, pageProps }) {
   return (
-    <Provider store={store}>{getLayout(<Component {...pageProps} />)}</Provider>
+    <Provider store={store}>
+      <App Component={Component} pageProps={pageProps} />
+    </Provider>
   );
 }
 

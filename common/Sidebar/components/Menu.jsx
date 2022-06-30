@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { usePopper } from "react-popper";
-import { CogIcon, LogoutIcon, UserCircleIcon } from "@heroicons/react/solid";
-import { LoginIcon } from "@heroicons/react/outline";
+import { CogIcon, UserCircleIcon } from "@heroicons/react/solid";
+import { LogoutIcon } from "@heroicons/react/outline";
 import { Popover } from "@headlessui/react";
 import { useRouter } from "next/router";
+import LoginModal from "@moon/features/Auth/components/LoginModal";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@moon/app/firebase";
+import { signout } from "@moon/features/Auth/authSlice";
 
 const Menu = (props) => {
-  const user = null;
-  const router = useRouter();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
   const [referenceElement, setReferenceElement] = useState();
   const [popperElement, setPopperElement] = useState();
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
@@ -16,8 +20,8 @@ const Menu = (props) => {
   });
 
   const handleLogout = () => {
-    router.push("/auth");
     logout();
+    dispatch(signout());
   };
 
   return (
@@ -54,27 +58,13 @@ const Menu = (props) => {
                 >
                   <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                     <div className="bg-white dark:bg-slate-700 w-[200px] p-2">
-                      {user ? (
-                        <>
-                          <button
-                            className="w-full text-left hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors p-2 rounded-full flex items-center"
-                            onClick={handleLogout}
-                          >
-                            <LogoutIcon className="h-6 w-6 mr-4 text-slate-400" />
-                            Sign out
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            className="w-full text-left hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors p-2 rounded-full flex items-center"
-                            onClick={handleLogout}
-                          >
-                            <LoginIcon className="h-6 w-6 mr-4 text-slate-400" />
-                            Sign In
-                          </button>
-                        </>
-                      )}
+                      <button
+                        className="w-full text-left hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors p-2 rounded-full flex items-center"
+                        onClick={handleLogout}
+                      >
+                        <LogoutIcon className="h-6 w-6 mr-4 text-slate-400" />
+                        Sign out
+                      </button>
                     </div>
                   </div>
                 </Popover.Panel>
@@ -83,10 +73,7 @@ const Menu = (props) => {
           </Popover>
         </>
       ) : (
-        <button className="w-full text-left bg-purple-700 hover:bg-purple-800 transition-colors py-2 px-4 rounded-full flex items-center mb-8 text-white">
-          <LoginIcon className="h-6 w-6 mr-4 text-white/75" />
-          Sign In
-        </button>
+        <LoginModal />
       )}
     </footer>
   );
