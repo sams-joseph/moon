@@ -14,7 +14,7 @@ const Home = () => {
       </Head>
       {user && (
         <header className="py-4">
-          <h1 className="text-xl font-thin">
+          <h1 className="text-xl text-slate-500 dark:text-slate-400">
             Welcome, {user.displayName} &#128075;
           </h1>
         </header>

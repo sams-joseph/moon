@@ -6,7 +6,7 @@ import flameIcon from "@moon/assets/images/flame--icon.png";
 const Aside = (props) => {
   return (
     <div className="w-[290px] xl:w-[350px] hidden lg:flex flex-col">
-      <header className="p-4 flex items-center">
+      <header className="pt-8 pb-4 px-4 flex items-center">
         <div className="relative h-8 w-8 rounded-full overflow-hidden mr-4">
           <Image
             src={flameIcon}
@@ -16,7 +16,7 @@ const Aside = (props) => {
             alt="trending"
           />
         </div>
-        <h1 className="text-xl capitalize">Trending</h1>
+        <h1 className="text-xl capitalize">Recent Coins</h1>
       </header>
       <div className="flex-1 p-4">
         <CoinPrice

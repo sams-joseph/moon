@@ -5,17 +5,19 @@ import Image from "next/image";
 
 const CoinPrice = ({ symbol, name, logo, price, percent }) => {
   return (
-    <div className="flex justify-between mb-4">
+    <div className="flex justify-between border-b border-slate-800 px-4 p-2">
       <div className="flex">
-        <div className="relative h-8 w-8 rounded-full overflow-hidden mr-4">
-          <Image
-            src={logo}
-            layout="fill"
-            objectFit="cover"
-            objectPosition="center"
-            alt={symbol}
-          />
-        </div>
+        {logo && (
+          <div className="relative h-8 w-8 rounded-full overflow-hidden mr-4">
+            <Image
+              src={logo}
+              layout="fill"
+              objectFit="cover"
+              objectPosition="center"
+              alt={symbol}
+            />
+          </div>
+        )}
         <div className="flex items-center">
           <div className="mr-8">
             <h4 className="text-xs bg-slate-300 dark:bg-slate-700 rounded inline-block px-2 py-1 mb-1">
@@ -41,7 +43,7 @@ const CoinPrice = ({ symbol, name, logo, price, percent }) => {
               } flex items-center justify-end`}
             >
               <IncreaseIcon value={percent} />
-              {percent}%
+              {Math.round(percent * 100) / 100}%
             </div>
           </div>
         </div>

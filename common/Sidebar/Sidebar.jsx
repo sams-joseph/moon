@@ -22,10 +22,10 @@ const ROUTES = [
       "bg-gradient-to-r from-purple-700 to-yellow-300 text-white",
   },
   {
-    id: "coins",
-    href: "/coins",
+    id: "listing",
+    href: "/listing",
     icon: <CurrencyDollarIcon className="opacity-70 h-6 w-6" />,
-    label: "Coins",
+    label: "Listing",
     activeClassName:
       "bg-gradient-to-r from-purple-700 to-yellow-300 text-white",
   },
