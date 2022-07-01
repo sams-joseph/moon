@@ -5,7 +5,7 @@ import flameIcon from "@moon/assets/images/flame--icon.png";
 
 const Aside = (props) => {
   return (
-    <div className="w-[290px] xl:w-[350px] hidden lg:flex flex-col">
+    <div className="w-[290px] xl:w-[350px] hidden lg:flex flex-col h-screen sticky top-0 bottom-0">
       <header className="pt-8 pb-4 px-4 flex items-center">
         <div className="relative h-8 w-8 rounded-full overflow-hidden mr-4">
           <Image

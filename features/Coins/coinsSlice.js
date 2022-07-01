@@ -44,7 +44,6 @@ export const coinsSlice = createSlice({
     });
     builder.addCase(fetchCoins.fulfilled, (state, { payload: coins }) => {
       state.loading = false;
-      console.log(coins);
       coinsAdapter.setAll(state, coins.data);
     });
     builder.addCase(fetchCoins.rejected, (state, action) => {
