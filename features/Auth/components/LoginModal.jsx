@@ -6,7 +6,7 @@ import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import Modal from "@moon/common/Modal";
 import Input from "@moon/common/Input";
 import { auth } from "@moon/app/firebase";
-import { loginStart, loginEnd, login } from "../authSlice";
+import { login } from "../authSlice";
 import { useDispatch } from "react-redux";
 
 const LoginModal = (props) => {
@@ -37,9 +37,9 @@ const LoginModal = (props) => {
       ref={modalRef}
       title="Login"
       trigger={
-        <button className="w-full justify-center xl:justify-start text-left bg-purple-700 hover:bg-purple-800 transition-colors py-2 px-4 rounded-full flex items-center text-white">
-          <LoginIcon className="h-6 w-6 text-white/75" />
-          <p className="ml-4 hidden xl:block">Sign In</p>
+        <button className="w-full justify-center xl:justify-start text-left bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors py-2 px-4 rounded-full flex items-center text-slate-900 dark:text-white">
+          <LoginIcon className="h-6 w-6 text-slate-900/75 dark:text-white/75" />
+          <p className="ml-4 hidden xl:block">Login</p>
         </button>
       }
     >
@@ -69,7 +69,7 @@ const LoginModal = (props) => {
           disabled={loading}
           className="w-full bg-purple-700 hover:bg-purple-800 transition-colors py-2 px-4 rounded-lg mt-8 text-white text-center disabled:bg-slate-500 disabled:text-slate-800"
         >
-          Sign In
+          Login
         </button>
       </form>
     </Modal>

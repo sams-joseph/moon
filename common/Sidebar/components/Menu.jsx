@@ -8,6 +8,7 @@ import LoginModal from "@moon/features/Auth/components/LoginModal";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@moon/app/firebase";
 import { signout } from "@moon/features/Auth/authSlice";
+import SignupModal from "@moon/features/Auth/components/SignupModal";
 
 const Menu = (props) => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const Menu = (props) => {
   };
 
   return (
-    <footer className="p-2 xl:p-4 flex items-center justify-center xl:justify-start mb-4">
+    <footer className="p-2 xl:p-4 flex flex-col items-center justify-center xl:justify-start mb-4">
       {user ? (
         <>
           <Popover className="xl:w-full">
@@ -73,7 +74,10 @@ const Menu = (props) => {
           </Popover>
         </>
       ) : (
-        <LoginModal />
+        <>
+          <SignupModal />
+          <LoginModal />
+        </>
       )}
     </footer>
   );
