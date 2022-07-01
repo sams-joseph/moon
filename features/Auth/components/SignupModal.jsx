@@ -72,7 +72,8 @@ const SignupModal = (props) => {
           label="Name"
           defaultValue=""
           disabled={submitting}
-          {...register("displayName")}
+          error={isSubmitted && errors.displayName}
+          {...register("displayName", { required: "Required" })}
         />
         <Input
           name="email"

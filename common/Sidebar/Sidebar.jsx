@@ -53,7 +53,7 @@ const Sidebar = (props) => {
   };
 
   return (
-    <header className="grow flex justify-end relative">
+    <header className="grow flex justify-end relative z-10">
       <div className="w-[68px] sm:w-[88px] xl:w-[275px] flex flex-col relative">
         <div className="w-[68px] sm:w-[88px] xl:w-[275px] flex flex-col fixed h-full top-0">
           <div className="flex flex-col xl:flex-row items-center justify-between">
