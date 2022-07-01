@@ -8,6 +8,7 @@ import Input from "@moon/common/Input";
 import { auth } from "@moon/app/firebase";
 import { login } from "../authSlice";
 import { useDispatch } from "react-redux";
+import Button from "@moon/common/Button";
 
 const LoginModal = (props) => {
   const dispatch = useDispatch();
@@ -71,13 +72,14 @@ const LoginModal = (props) => {
           {...register("password", { required: "Required" })}
         />
 
-        <button
+        <Button
+          color="primary"
           type="submit"
+          className="w-full mt-8"
           disabled={submitting}
-          className="w-full bg-purple-700 hover:bg-purple-800 transition-colors py-2 px-4 rounded-lg mt-8 text-white text-center disabled:bg-slate-500 disabled:text-slate-800"
         >
           Login
-        </button>
+        </Button>
       </form>
     </Modal>
   );

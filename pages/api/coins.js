@@ -513,7 +513,6 @@ const placeholder = {
 };
 
 export default async function handler(req, res) {
-  console.log(req);
   try {
     const response = await axios.get(
       `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest`,

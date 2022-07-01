@@ -1,14 +1,18 @@
+import { db } from "@moon/app/firebase";
+import Alert from "@moon/common/Alert";
 import Layout from "@moon/common/Layout";
-import { coinsSelectors } from "@moon/features/Coins/coinsSlice";
-import { formatMoney } from "@moon/utils/formatMoney";
+import Spinner from "@moon/common/Spinner";
+import Transactions from "@moon/features/Transactions";
+import { doc } from "firebase/firestore";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
 const Coin = () => {
   const router = useRouter();
   const { symbol } = router.query;
-  const coin = useSelector((state) => coinsSelectors.selectById(state, symbol));
+  const coinRef = doc(db, "coins", symbol);
+  const [coin, loading, error] = useDocumentData(coinRef, {});
 
   return (
     <div className="px-4 py-8 w-full sm:w-[600px] border-x border-slate-300 dark:border-slate-700 min-h-full">
@@ -17,18 +21,14 @@ const Coin = () => {
         <meta name="description" content={`${symbol}`} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className="text-[30px] capitalize mb-8">{coin.name}</h1>
-      <div className="bg-slate-800 dark:bg-slate-200 rounded-2xl p-2">
-        <div className="p-4 flex justify-between">
-          <h2 className="text-lg uppercase text-white dark:text-black">
-            {symbol}
-          </h2>
-          <h2 className="text-lg uppercase text-white dark:text-black">
-            {formatMoney(coin.quote.USD.price)}
-          </h2>
+      {error && <Alert message={error?.message} />}
+      {loading ? (
+        <div className="flex items-center justify-center p-10">
+          <Spinner className="h-10 w-10" />
         </div>
-        <div className="bg-slate-100 dark:bg-slate-900 rounded-2xl p-4"></div>
-      </div>
+      ) : (
+        <Transactions coin={coin} />
+      )}
     </div>
   );
 };

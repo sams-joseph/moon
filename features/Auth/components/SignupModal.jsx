@@ -10,6 +10,7 @@ import { login } from "../authSlice";
 import { useDispatch } from "react-redux";
 import { CakeIcon } from "@heroicons/react/solid";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import Button from "@moon/common/Button";
 
 const SignupModal = (props) => {
   const dispatch = useDispatch();
@@ -109,13 +110,14 @@ const SignupModal = (props) => {
           })}
         />
 
-        <button
+        <Button
+          color="primary"
           type="submit"
+          className="w-full mt-8"
           disabled={submitting}
-          className="w-full bg-purple-700 hover:bg-purple-800 transition-colors py-2 px-4 rounded-lg mt-8 text-white text-center disabled:bg-slate-500 disabled:text-slate-800"
         >
           Sign Up
-        </button>
+        </Button>
       </form>
     </Modal>
   );
