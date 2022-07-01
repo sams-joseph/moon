@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { LoginIcon } from "@heroicons/react/outline";
 import { useForm } from "react-hook-form";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 import Modal from "@moon/common/Modal";
 import Input from "@moon/common/Input";
@@ -12,24 +12,29 @@ import { useDispatch } from "react-redux";
 const LoginModal = (props) => {
   const dispatch = useDispatch();
   const modalRef = useRef();
-  const [signInWithEmailAndPassword, user, loading, error] =
-    useSignInWithEmailAndPassword(auth);
-
-  useEffect(() => {
-    if (user?.user) {
-      dispatch(login(JSON.parse(JSON.stringify(user.user))));
-      modalRef?.current.close();
-    }
-  }, [dispatch, user]);
-
+  const [error, setError] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitted },
   } = useForm();
 
   const onSubmit = async (data) => {
-    await signInWithEmailAndPassword(data.email, data.password);
+    try {
+      setSubmitting(true);
+      const response = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+
+      dispatch(login(JSON.parse(JSON.stringify(response.user))));
+      modalRef?.current.close();
+    } catch (err) {
+      setError(err.message);
+    }
+    setSubmitting(false);
   };
 
   return (
@@ -51,8 +56,9 @@ const LoginModal = (props) => {
           placeholder="Email"
           label="Email"
           defaultValue=""
-          disabled={loading}
-          {...register("email")}
+          disabled={submitting}
+          error={isSubmitted && errors.email}
+          {...register("email", { required: "Required" })}
         />
         <Input
           name="password"
@@ -60,13 +66,14 @@ const LoginModal = (props) => {
           placeholder="Password"
           label="Password"
           defaultValue=""
-          disabled={loading}
-          {...register("password")}
+          disabled={submitting}
+          error={isSubmitted && errors.password}
+          {...register("password", { required: "Required" })}
         />
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={submitting}
           className="w-full bg-purple-700 hover:bg-purple-800 transition-colors py-2 px-4 rounded-lg mt-8 text-white text-center disabled:bg-slate-500 disabled:text-slate-800"
         >
           Login
