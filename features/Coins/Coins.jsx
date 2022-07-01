@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CoinPrice from "@moon/common/CoinPrice";
 import Select from "@moon/common/Select";
 import Spinner from "@moon/common/Spinner";
@@ -6,25 +6,35 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "@moon/app/firebase";
 import { collection, orderBy, query, where } from "firebase/firestore";
 import Alert from "@moon/common/Alert";
+import Input from "@moon/common/Input";
 
 const Coins = (props) => {
   const coinsRef = collection(db, "coins");
   const [filter, setFilter] = useState("all");
+  const [keywords, setQuery] = useState("");
   const [clauses, setClauses] = useState([orderBy("cmc_rank")]);
 
   const q = query(coinsRef, ...clauses);
   const [coins, loading, error] = useCollectionData(q, {});
 
+  useEffect(() => {
+    const arr = [];
+    if (filter !== "all") {
+      arr.push(where("tags", "array-contains", filter));
+      arr.push(orderBy("cmc_rank"));
+    } else {
+      arr.push(orderBy("cmc_rank"));
+    }
+
+    if (keywords.length > 0) {
+      arr.push(where("name", "==", keywords));
+    }
+
+    setClauses(arr);
+  }, [filter, keywords]);
+
   const handleChange = (e) => {
     setFilter(e.target.value);
-    if (e.target.value !== "all") {
-      setClauses([
-        where("tags", "array-contains", e.target.value),
-        orderBy("cmc_rank"),
-      ]);
-    } else {
-      setClauses([orderBy("cmc_rank")]);
-    }
   };
 
   return (
@@ -45,6 +55,15 @@ const Coins = (props) => {
               <option value="defi">Defi</option>
               <option value="filesharing">Filesharing</option>
             </Select>
+          </div>
+          <div className="mr-2 flex-1">
+            <Input
+              label="Search"
+              name="search"
+              placeholder="Bitcoin"
+              value={keywords}
+              onChange={(e) => setQuery(e.target.value)}
+            />
           </div>
         </div>
       </header>
