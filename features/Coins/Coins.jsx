@@ -5,11 +5,13 @@ import Spinner from "@moon/common/Spinner";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "@moon/app/firebase";
 import { collection, orderBy, query, where } from "firebase/firestore";
-import Alert from "@moon/common/Alert";
 import Input from "@moon/common/Input";
 import useDebounce from "@moon/hooks/useDebounce";
+import { clearFlash, showFlash } from "../Flash/flashSlice";
+import { useDispatch } from "react-redux";
 
 const Coins = (props) => {
+  const dispatch = useDispatch();
   const coinsRef = collection(db, "coins");
   const [filter, setFilter] = useState("all");
   const [keywords, setQuery] = useState("");
@@ -18,6 +20,16 @@ const Coins = (props) => {
 
   const q = query(coinsRef, ...clauses);
   const [coins, loading, error] = useCollectionData(q, {});
+
+  useEffect(() => {
+    if (error) {
+      dispatch(showFlash({ message: error.message, type: "error" }));
+    }
+
+    return () => {
+      dispatch(clearFlash());
+    };
+  }, [error, dispatch]);
 
   useEffect(() => {
     const arr = [];
@@ -41,7 +53,6 @@ const Coins = (props) => {
 
   return (
     <div>
-      {error && <Alert message={error?.message} />}
       <header className="p-4">
         <h1 className="text-[30px] capitalize mt-4 mb-8">Coins</h1>
         <div className="flex">

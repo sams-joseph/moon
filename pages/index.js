@@ -6,7 +6,7 @@ const Home = () => {
   const user = useSelector((state) => state.auth.user);
 
   return (
-    <div className="p-4 w-full sm:w-[600px] border-x border-slate-300 dark:border-slate-700 min-h-full">
+    <div className="p-4">
       <Head>
         <title>Watchlists</title>
         <meta name="description" content="Crypto Watchlists" />

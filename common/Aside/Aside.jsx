@@ -1,9 +1,12 @@
 import Image from "next/image";
 import React from "react";
-import CoinPrice from "../CoinPrice";
 import flameIcon from "@moon/assets/images/flame--icon.png";
+import { useSelector } from "react-redux";
+import Wallet from "@moon/features/Wallet";
 
 const Aside = (props) => {
+  const user = useSelector((state) => state.auth.user);
+
   return (
     <div className="w-[290px] xl:w-[350px] hidden lg:flex flex-col h-screen sticky top-0 bottom-0">
       <header className="pt-8 pb-4 px-4 flex items-center">
@@ -16,24 +19,9 @@ const Aside = (props) => {
             alt="trending"
           />
         </div>
-        <h1 className="text-xl capitalize">Recent Coins</h1>
+        <h1 className="text-xl capitalize">Wallet Summary</h1>
       </header>
-      <div className="flex-1 p-4">
-        <CoinPrice
-          symbol="BTC"
-          name="Bitcoin"
-          logo="https://i.pravatar.cc/300"
-          price={19000}
-          percent={1.24}
-        />
-        <CoinPrice
-          symbol="ETH"
-          name="Ethereum"
-          logo="https://i.pravatar.cc/300"
-          price={1000}
-          percent={-1.24}
-        />
-      </div>
+      {user && <Wallet user={user} />}
       <footer className="px-4 py-8">
         <p className="text-sm">Attributions</p>
         <a

@@ -6,6 +6,7 @@ import "../styles/globals.css";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@moon/app/firebase";
 import { login } from "@moon/features/Auth/authSlice";
+import Spinner from "@moon/common/Spinner";
 
 const App = ({ Component, pageProps }) => {
   const dispatch = useDispatch();
@@ -26,6 +27,13 @@ const App = ({ Component, pageProps }) => {
       document.documentElement.classList.remove("dark");
     }
   }, []);
+
+  if (loading)
+    return (
+      <div className="h-screen w-full flex items-center justify-center">
+        <Spinner className="h-20 w-20" />
+      </div>
+    );
 
   return getLayout(<Component {...pageProps} />);
 };

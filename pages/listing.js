@@ -5,7 +5,7 @@ import Coins from "@moon/features/Coins";
 
 const Listing = () => {
   return (
-    <div className="w-full sm:w-[600px] border-x border-slate-300 dark:border-slate-700 min-h-full">
+    <div>
       <Head>
         <title>Coins</title>
         <meta name="description" content="Crypto Coins" />

@@ -3,22 +3,32 @@ import { IncreaseIcon } from "@moon/common/Icons";
 import { formatMoney } from "@moon/utils/formatMoney";
 import Image from "next/image";
 import Link from "next/link";
+import { doc } from "firebase/firestore";
+import { db } from "@moon/app/firebase";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
 const CoinPrice = ({ symbol, name, logo, price, percent }) => {
+  const metaRef = doc(db, "coin_metas", symbol);
+  const [meta, loading, error] = useDocumentData(metaRef, {});
+
   return (
     <Link href={`/coins/${symbol}`}>
       <a className="flex justify-between border-b border-slate-300 dark:border-slate-800 px-4 p-2">
-        <div className="flex">
-          {logo && (
-            <div className="relative h-8 w-8 rounded-full overflow-hidden mr-4">
-              <Image
-                src={logo}
-                layout="fill"
-                objectFit="cover"
-                objectPosition="center"
-                alt={symbol}
-              />
-            </div>
+        <div className="flex items-center">
+          {loading ? (
+            <div className="relative h-10 w-10 rounded-full overflow-hidden mr-4 bg-slate-300 dark:bg-slate-800"></div>
+          ) : (
+            meta?.logo && (
+              <div className="relative h-10 w-10 rounded-full overflow-hidden mr-4">
+                <Image
+                  src={meta.logo}
+                  layout="fill"
+                  objectFit="cover"
+                  objectPosition="center"
+                  alt={symbol}
+                />
+              </div>
+            )
           )}
           <div className="flex items-center">
             <div className="mr-8">

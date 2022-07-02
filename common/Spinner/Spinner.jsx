@@ -5,7 +5,7 @@ const Spinner = ({ ...props }) => {
     <div {...props}>
       <svg
         role="status"
-        className="animate-spin text-slate-200 dark:text-slate-700 fill-yellow-600 mr-2"
+        className="animate-spin text-slate-200 dark:text-slate-700 fill-yellow-600 dark:fill-yellow-300 mr-2"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

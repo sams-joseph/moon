@@ -36,3 +36,30 @@ exports.updateCoinData = functions.pubsub
         return null;
       });
   });
+
+// Run every day to update coin info
+exports.updateCoinInfo = functions.pubsub
+  .schedule("every 24 hours")
+  .onRun(async (context) => {
+    const docRefs = await db.collection("coins").listDocuments();
+    const ids = docRefs.map((it) => it.id);
+
+    axios
+      .get(`https://pro-api.coinmarketcap.com/v2/cryptocurrency/info`, {
+        params: { symbol: ids.join(",") },
+        headers: {
+          "X-CMC_PRO_API_KEY": process.env.COIN_MARKET_CAP_API_KEY,
+        },
+      })
+      .then((res) => {
+        Object.keys(res.data.data).forEach((key) => {
+          const coin = res.data.data[key][0];
+          db.collection("coin_metas").doc(coin.symbol).set(coin);
+        });
+        return null;
+      })
+      .catch((err) => {
+        console.log(err);
+        return null;
+      });
+  });
