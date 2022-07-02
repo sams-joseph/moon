@@ -7,7 +7,7 @@ const Transactions = ({ coin }) => {
     <div>
       <header className="flex items-center justify-between mb-8">
         <h1 className="text-[30px] capitalize">{coin.name}</h1>
-        <CreateModal currentPrice={coin.quote.USD.price} />
+        <CreateModal coin={coin} />
       </header>
       <div className="bg-slate-800 dark:bg-slate-200 rounded-2xl p-2">
         <div className="p-4 flex justify-between">

@@ -7,12 +7,14 @@ import { db } from "@moon/app/firebase";
 import { collection, orderBy, query, where } from "firebase/firestore";
 import Alert from "@moon/common/Alert";
 import Input from "@moon/common/Input";
+import useDebounce from "@moon/hooks/useDebounce";
 
 const Coins = (props) => {
   const coinsRef = collection(db, "coins");
   const [filter, setFilter] = useState("all");
   const [keywords, setQuery] = useState("");
   const [clauses, setClauses] = useState([orderBy("cmc_rank")]);
+  const searchQuery = useDebounce(keywords, 500);
 
   const q = query(coinsRef, ...clauses);
   const [coins, loading, error] = useCollectionData(q, {});
@@ -26,12 +28,12 @@ const Coins = (props) => {
       arr.push(orderBy("cmc_rank"));
     }
 
-    if (keywords.length > 0) {
-      arr.push(where("name", "==", keywords));
+    if (searchQuery.length > 0) {
+      arr.push(where("name", "==", searchQuery));
     }
 
     setClauses(arr);
-  }, [filter, keywords]);
+  }, [filter, searchQuery]);
 
   const handleChange = (e) => {
     setFilter(e.target.value);

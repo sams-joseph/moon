@@ -5,15 +5,17 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 
 import Modal from "@moon/common/Modal";
 import Input from "@moon/common/Input";
-import { auth } from "@moon/app/firebase";
-import { useDispatch } from "react-redux";
+import { auth, db } from "@moon/app/firebase";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "@moon/common/Button";
 import { CurrencyDollarIcon } from "@heroicons/react/solid";
+import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
 
-const CreateModal = ({ currentPrice }) => {
+const CreateModal = ({ coin }) => {
   const dispatch = useDispatch();
   const modalRef = useRef();
   const transactionType = useRef("buy");
+  const user = useSelector((state) => state.auth.user);
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const {
@@ -24,8 +26,9 @@ const CreateModal = ({ currentPrice }) => {
     setValue,
   } = useForm({
     defaultValues: {
-      price: currentPrice,
-      amount: "",
+      uid: user.uid,
+      price: coin.quote.USD.price,
+      amount: 0,
       transaction_id: "",
       transaction_type: "buy",
     },
@@ -35,14 +38,18 @@ const CreateModal = ({ currentPrice }) => {
   const onSubmit = async (data) => {
     try {
       setSubmitting(true);
-      const response = await signInWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
+
+      await addDoc(collection(db, "transactions"), { ...data, coin });
+      await setDoc(doc(db, "wallets", user.uid), {
+        [coin.symbol]: {
+          average_price: data.amount / data.price,
+          balance: data.amount,
+        },
+      });
 
       modalRef?.current.close();
     } catch (err) {
+      console.log(err);
       setError(err.message);
     }
     setSubmitting(false);
@@ -82,7 +89,7 @@ const CreateModal = ({ currentPrice }) => {
             Sell
           </Button>
         </div>
-        <form onSubmit={handleSubmit} className="mt-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
           <Input
             name="price"
             label="Price"
