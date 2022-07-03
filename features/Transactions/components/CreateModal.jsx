@@ -39,7 +39,11 @@ const CreateModal = ({ coin }) => {
     try {
       setSubmitting(true);
 
-      await addDoc(collection(db, "transactions"), { ...data, coin });
+      await addDoc(collection(db, "transactions"), {
+        ...data,
+        coin,
+        created_at: new Date().toString(),
+      });
       await setDoc(doc(db, "wallets", user.uid), {
         [coin.symbol]: {
           average_price: data.amount / data.price,
@@ -49,7 +53,6 @@ const CreateModal = ({ coin }) => {
 
       modalRef?.current.close();
     } catch (err) {
-      console.log(err);
       setError(err.message);
     }
     setSubmitting(false);

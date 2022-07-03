@@ -84,7 +84,7 @@ const Coins = (props) => {
         <div className="flex items-center justify-center p-10">
           <Spinner className="h-10 w-10" />
         </div>
-      ) : (
+      ) : coins?.length > 0 ? (
         coins?.map((coin) => (
           <CoinPrice
             key={coin.symbol}
@@ -95,6 +95,11 @@ const Coins = (props) => {
             percent={coin.quote.USD.percent_change_24h}
           />
         ))
+      ) : (
+        <div className="flex flex-col items-center justify-center p-8 text-slate-500 dark:text-slate-400">
+          <p className="text-3xl">😞</p>
+          <p>No results found</p>
+        </div>
       )}
     </div>
   );

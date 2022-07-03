@@ -47,9 +47,8 @@ export const coinsSlice = createSlice({
       coinsAdapter.setAll(state, coins.data);
     });
     builder.addCase(fetchCoins.rejected, (state, action) => {
-      console.log(action);
       if (action.payload) {
-        //   state.errors = action.payload?.errors;
+        state.errors = action.payload?.errors;
       }
     });
   },

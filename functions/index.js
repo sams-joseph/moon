@@ -32,7 +32,6 @@ exports.updateCoinData = functions.pubsub
         return null;
       })
       .catch((err) => {
-        console.log(err);
         return null;
       });
   });
@@ -59,7 +58,6 @@ exports.updateCoinInfo = functions.pubsub
         return null;
       })
       .catch((err) => {
-        console.log(err);
         return null;
       });
   });

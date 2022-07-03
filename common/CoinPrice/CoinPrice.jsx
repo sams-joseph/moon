@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IncreaseIcon } from "@moon/common/Icons";
 import { formatMoney } from "@moon/utils/formatMoney";
 import Image from "next/image";
@@ -6,10 +6,23 @@ import Link from "next/link";
 import { doc } from "firebase/firestore";
 import { db } from "@moon/app/firebase";
 import { useDocumentData } from "react-firebase-hooks/firestore";
+import { useDispatch } from "react-redux";
+import { clearFlash, showFlash } from "@moon/features/Flash/flashSlice";
 
-const CoinPrice = ({ symbol, name, logo, price, percent }) => {
+const CoinPrice = ({ symbol, name, price, percent }) => {
+  const dispatch = useDispatch();
   const metaRef = doc(db, "coin_metas", symbol);
   const [meta, loading, error] = useDocumentData(metaRef, {});
+
+  useEffect(() => {
+    if (error) {
+      dispatch(showFlash({ message: error.message, type: "error" }));
+    }
+
+    return () => {
+      dispatch(clearFlash());
+    };
+  }, [error, dispatch]);
 
   return (
     <Link href={`/coins/${symbol}`}>

@@ -31,10 +31,8 @@ const Coin = () => {
     };
   }, [error, errorMeta, dispatch]);
 
-  console.log(meta);
-
   return (
-    <div className="p-4">
+    <div>
       <Head>
         <title>{symbol}</title>
         <meta name="description" content={`${symbol}`} />

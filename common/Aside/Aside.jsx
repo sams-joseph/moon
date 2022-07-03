@@ -19,7 +19,7 @@ const Aside = (props) => {
             alt="trending"
           />
         </div>
-        <h1 className="text-xl capitalize">Wallet Summary</h1>
+        <h1 className="text-xl capitalize">Summary</h1>
       </header>
       {user && <Wallet user={user} />}
       <footer className="px-4 py-8">
@@ -37,6 +37,20 @@ const Aside = (props) => {
           title="flames icons"
         >
           Flames icons created by Flat Icons - Flaticon
+        </a>
+        <a
+          className="block text-xs text-black/50 dark:text-white/50 underline"
+          href="https://www.flaticon.com/free-icons/decrease"
+          title="decrease icons"
+        >
+          Decrease icons created by Arzu C. - Flaticon
+        </a>
+        <a
+          className="block text-xs text-black/50 dark:text-white/50 underline"
+          href="https://www.flaticon.com/free-icons/increase"
+          title="increase icons"
+        >
+          Increase icons created by Arzu C. - Flaticon
         </a>
       </footer>
     </div>
