@@ -4,15 +4,41 @@ import { store } from "@moon/app/store";
 
 import "../styles/globals.css";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@moon/app/firebase";
+import { auth, db } from "@moon/app/firebase";
 import { login } from "@moon/features/Auth/authSlice";
 import Spinner from "@moon/common/Spinner";
+import { collection, getDocs } from "firebase/firestore";
+import { clearFlash, showFlash } from "@moon/features/Flash/flashSlice";
+import { setAllCoins } from "@moon/features/Coins/coinsSlice";
 
 const App = ({ Component, pageProps }) => {
   const dispatch = useDispatch();
   const [user, loading, error] = useAuthState(auth);
-
   const getLayout = Component.getLayout || ((page) => page);
+
+  useEffect(() => {
+    const promise = async () => {
+      if (user) {
+        const response = await getDocs(collection(db, "coin_metas"));
+
+        const coins = response.docs.map((doc) => doc.data());
+
+        dispatch(setAllCoins(coins));
+      }
+    };
+
+    promise();
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      dispatch(showFlash({ message: error.message, type: "error" }));
+    }
+
+    return () => {
+      dispatch(clearFlash());
+    };
+  }, [error, dispatch]);
 
   useEffect(() => {
     if (user) {

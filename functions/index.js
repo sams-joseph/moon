@@ -61,3 +61,62 @@ exports.updateCoinInfo = functions.pubsub
         return null;
       });
   });
+
+exports.updateSummary = functions.firestore
+  .document("transactions/{transactionId}")
+  .onCreate(async (snap, context) => {
+    const newValue = snap.data();
+    const docRef = db.collection("wallets").doc(newValue.uid);
+    const summary = await db.collection("wallets").doc(newValue.uid).get();
+    if (summary.exists) {
+      const doc = summary.data();
+      let newSummary = {
+        [newValue.coin.symbol]: {
+          total: Number(newValue.amount),
+          balance: Number(newValue.price),
+        },
+      };
+      if (newValue.transaction_type === "buy") {
+        const newTotal = doc[newValue.coin.symbol]
+          ? Number(doc[newValue.coin.symbol].total) + Number(newValue.amount)
+          : Number(newValue.amount);
+        const newBalance = doc[newValue.coin.symbol]
+          ? Number(doc[newValue.coin.symbol].balance) +
+            Number(newValue.price * newValue.amount)
+          : Number(newValue.price * newValue.amount);
+        newSummary = {
+          [newValue.coin.symbol]: {
+            total: newTotal,
+            balance: newBalance,
+          },
+        };
+      } else {
+        const newTotal = doc[newValue.coin.symbol]
+          ? Number(doc[newValue.coin.symbol].total) - Number(newValue.amount)
+          : -Number(newValue.amount);
+        const newBalance = doc[newValue.coin.symbol]
+          ? Number(doc[newValue.coin.symbol].balance) -
+            Number(newValue.price * newValue.amount)
+          : -Number(newValue.price * newValue.amount);
+        newSummary = {
+          [newValue.coin.symbol]: {
+            total: newTotal,
+            balance: newBalance,
+          },
+        };
+      }
+
+      docRef.update(newSummary);
+    } else {
+      const newSummary = {
+        [newValue.coin.symbol]: {
+          total: Number(newValue.amount),
+          balance: Number(newValue.price) * Number(newValue.amount),
+        },
+      };
+
+      docRef.set(newSummary);
+    }
+
+    return null;
+  });

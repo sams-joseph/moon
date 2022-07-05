@@ -36,7 +36,10 @@ const coinsAdapter = createEntityAdapter({
 export const coinsSlice = createSlice({
   name: "coins",
   initialState: coinsAdapter.getInitialState(initialState),
-  reducers: {},
+  reducers: {
+    setAllCoins: coinsAdapter.setAll,
+    removeAllCoins: coinsAdapter.removeAll,
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCoins.pending, (state, action) => {
       state.errors = null;
@@ -55,5 +58,7 @@ export const coinsSlice = createSlice({
 });
 
 export const coinsSelectors = coinsAdapter.getSelectors((state) => state.coins);
+
+export const { setAllCoins, removeAllCoins } = coinsSlice.actions;
 
 export default coinsSlice.reducer;

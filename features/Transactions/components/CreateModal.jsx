@@ -9,7 +9,14 @@ import { auth, db } from "@moon/app/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "@moon/common/Button";
 import { CurrencyDollarIcon } from "@heroicons/react/solid";
-import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  setDoc,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
 
 const CreateModal = ({ coin }) => {
   const dispatch = useDispatch();
@@ -19,6 +26,7 @@ const CreateModal = ({ coin }) => {
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const {
+    reset,
     register,
     handleSubmit,
     formState: { errors, isSubmitted },
@@ -38,19 +46,14 @@ const CreateModal = ({ coin }) => {
   const onSubmit = async (data) => {
     try {
       setSubmitting(true);
-
+      const today = Timestamp.now();
       await addDoc(collection(db, "transactions"), {
         ...data,
         coin,
-        created_at: new Date().toString(),
-      });
-      await setDoc(doc(db, "wallets", user.uid), {
-        [coin.symbol]: {
-          average_price: data.amount / data.price,
-          balance: data.amount,
-        },
+        created_at: today,
       });
 
+      reset();
       modalRef?.current.close();
     } catch (err) {
       setError(err.message);
