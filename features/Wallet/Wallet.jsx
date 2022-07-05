@@ -8,6 +8,7 @@ import Spinner from "@moon/common/Spinner";
 import { formatMoney } from "@moon/utils/formatMoney";
 import { coinsSelectors } from "../Coins/coinsSlice";
 import Image from "next/image";
+import flameIcon from "@moon/assets/images/flame--icon.png";
 
 const ListItem = ({ item }) => {
   const meta = useSelector((state) =>
@@ -68,19 +69,33 @@ const Wallet = ({ user }) => {
   }, [wallet]);
 
   return (
-    <div className="flex-1 p-4">
-      {loading ? (
-        <div className="flex items-center justify-center p-10">
-          <Spinner className="h-10 w-10" />
+    <>
+      <header className="pt-8 pb-4 px-4 flex items-center">
+        <div className="relative h-8 w-8 rounded-full overflow-hidden mr-4">
+          <Image
+            src={flameIcon}
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center"
+            alt="trending"
+          />
         </div>
-      ) : (
-        <div className="p-4 rounded-lg bg-slate-200 dark:bg-slate-800">
-          {summary.map((item) => (
-            <ListItem key={item.name} item={item} />
-          ))}
-        </div>
-      )}
-    </div>
+        <h1 className="text-xl capitalize">Summary</h1>
+      </header>
+      <div className="flex-1 p-4">
+        {loading ? (
+          <div className="flex items-center justify-center p-10">
+            <Spinner className="h-10 w-10" />
+          </div>
+        ) : (
+          <div className="p-4 rounded-lg bg-slate-200 dark:bg-slate-800">
+            {summary.map((item) => (
+              <ListItem key={item.name} item={item} />
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

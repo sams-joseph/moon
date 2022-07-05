@@ -68,14 +68,15 @@ exports.updateSummary = functions.firestore
     const newValue = snap.data();
     const docRef = db.collection("wallets").doc(newValue.uid);
     const summary = await db.collection("wallets").doc(newValue.uid).get();
+    let newSummary = {
+      [newValue.coin.symbol]: {
+        total: Number(newValue.amount),
+        balance: Number(newValue.price),
+      },
+    };
+
     if (summary.exists) {
       const doc = summary.data();
-      let newSummary = {
-        [newValue.coin.symbol]: {
-          total: Number(newValue.amount),
-          balance: Number(newValue.price),
-        },
-      };
       if (newValue.transaction_type === "buy") {
         const newTotal = doc[newValue.coin.symbol]
           ? Number(doc[newValue.coin.symbol].total) + Number(newValue.amount)
@@ -108,12 +109,21 @@ exports.updateSummary = functions.firestore
 
       docRef.update(newSummary);
     } else {
-      const newSummary = {
-        [newValue.coin.symbol]: {
-          total: Number(newValue.amount),
-          balance: Number(newValue.price) * Number(newValue.amount),
-        },
-      };
+      if (newValue.transaction_type === "buy") {
+        newSummary = {
+          [newValue.coin.symbol]: {
+            total: Number(newValue.amount),
+            balance: Number(newValue.price) * Number(newValue.amount),
+          },
+        };
+      } else {
+        newSummary = {
+          [newValue.coin.symbol]: {
+            total: Number(newValue.amount),
+            balance: -Number(newValue.price) * Number(newValue.amount),
+          },
+        };
+      }
 
       docRef.set(newSummary);
     }
