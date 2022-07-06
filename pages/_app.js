@@ -18,17 +18,15 @@ const App = ({ Component, pageProps }) => {
 
   useEffect(() => {
     const promise = async () => {
-      if (user) {
-        const response = await getDocs(collection(db, "coin_metas"));
+      const response = await getDocs(collection(db, "coin_metas"));
 
-        const coins = response.docs.map((doc) => doc.data());
+      const coins = response.docs.map((doc) => doc.data());
 
-        dispatch(setAllCoins(coins));
-      }
+      dispatch(setAllCoins(coins));
     };
 
     promise();
-  }, [user, dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (error) {

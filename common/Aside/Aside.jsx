@@ -10,7 +10,7 @@ const Aside = (props) => {
   const user = useSelector((state) => state.auth.user);
 
   return (
-    <div className="w-[290px] xl:w-[350px] hidden lg:flex flex-col h-screen sticky top-0 bottom-0">
+    <div className="w-[290px] xl:w-[350px] hidden lg:flex flex-col h-screen sticky top-0 bottom-0 overflow-auto">
       {user ? (
         <Wallet user={user} />
       ) : (

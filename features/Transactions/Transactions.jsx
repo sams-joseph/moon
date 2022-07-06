@@ -76,9 +76,9 @@ const Transactions = ({ coin, meta }) => {
           <Spinner className="h-10 w-10" />
         </div>
       ) : transactions.length > 0 ? (
-        transactions?.map((transaction) => (
+        transactions?.map((transaction, i) => (
           <div
-            key={transaction.id}
+            key={i}
             className="grid grid-cols-3 p-4 border-b border-slate-300 dark:border-slate-600"
           >
             <div className="flex items-center">

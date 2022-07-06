@@ -11,7 +11,7 @@ const CoinPrice = ({ symbol, name, price, percent }) => {
 
   return (
     <Link href={`/coins/${symbol}`}>
-      <a className="flex justify-between border-b border-slate-300 dark:border-slate-800 px-4 p-2">
+      <a className="flex justify-between border-b border-slate-300 dark:border-slate-800 px-4 p-2 hover:bg-slate-200 hover:dark:bg-slate-800 transition-colors">
         <div className="flex items-center">
           {meta?.logo && (
             <div className="relative h-10 w-10 rounded-full overflow-hidden mr-4">
