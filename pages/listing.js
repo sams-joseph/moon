@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Input from "@moon/common/Input";
 import Layout from "@moon/common/Layout";
 import Coins from "@moon/features/Coins";
 

@@ -1,5 +1,4 @@
 import axios from "axios";
-// import convertObjectToArray from "@moon/utils/convertObjectToArray";
 
 const instance = axios.create({
   baseURL: `/api`,

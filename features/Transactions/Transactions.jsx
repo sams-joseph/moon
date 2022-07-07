@@ -1,22 +1,19 @@
-import React, { useEffect } from "react";
-import CreateModal from "./components/CreateModal";
+import React from "react";
 import { formatMoney } from "@moon/utils/formatMoney";
 import Image from "next/image";
-import { IncreaseIcon } from "@moon/common/Icons";
 
 import emoji from "@moon/assets/images/emoji--icon.png";
 import increase from "@moon/assets/images/increase--icon.png";
 import decrease from "@moon/assets/images/decrease--icon.png";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { collection, orderBy, query, where } from "firebase/firestore";
 import { db } from "@moon/app/firebase";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import dayjs from "dayjs";
 import Spinner from "@moon/common/Spinner";
-import { clearFlash, showFlash } from "../Flash/flashSlice";
+import useFlashMessage from "@moon/hooks/useFlashMessage";
 
 const Transactions = ({ coin, meta }) => {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const transactionsRef = collection(db, "transactions");
   const q = query(
@@ -27,15 +24,7 @@ const Transactions = ({ coin, meta }) => {
   );
   const [transactions, loading, error] = useCollectionData(q);
 
-  useEffect(() => {
-    if (error) {
-      dispatch(showFlash({ message: error.message, type: "error" }));
-    }
-
-    return () => {
-      dispatch(clearFlash());
-    };
-  }, [error, dispatch]);
+  useFlashMessage(error);
 
   if (!coin || !meta) return null;
 

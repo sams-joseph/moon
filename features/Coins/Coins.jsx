@@ -7,11 +7,9 @@ import { db } from "@moon/app/firebase";
 import { collection, orderBy, query, where } from "firebase/firestore";
 import Input from "@moon/common/Input";
 import useDebounce from "@moon/hooks/useDebounce";
-import { clearFlash, showFlash } from "../Flash/flashSlice";
-import { useDispatch } from "react-redux";
+import useFlashMessage from "@moon/hooks/useFlashMessage";
 
 const Coins = (props) => {
-  const dispatch = useDispatch();
   const coinsRef = collection(db, "coins");
   const [filter, setFilter] = useState("all");
   const [keywords, setQuery] = useState("");
@@ -21,15 +19,7 @@ const Coins = (props) => {
   const q = query(coinsRef, ...clauses);
   const [coins, loading, error] = useCollectionData(q, {});
 
-  useEffect(() => {
-    if (error) {
-      dispatch(showFlash({ message: error.message, type: "error" }));
-    }
-
-    return () => {
-      dispatch(clearFlash());
-    };
-  }, [error, dispatch]);
+  useFlashMessage(error);
 
   useEffect(() => {
     const arr = [];

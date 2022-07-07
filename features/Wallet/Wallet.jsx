@@ -1,14 +1,14 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { db } from "@moon/app/firebase";
 import { doc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { useDispatch, useSelector } from "react-redux";
-import { clearFlash, showFlash } from "@moon/features/Flash/flashSlice";
+import { useSelector } from "react-redux";
 import Spinner from "@moon/common/Spinner";
 import { formatMoney } from "@moon/utils/formatMoney";
 import { coinsSelectors } from "../Coins/coinsSlice";
 import Image from "next/image";
 import flameIcon from "@moon/assets/images/flame--icon.png";
+import useFlashMessage from "@moon/hooks/useFlashMessage";
 
 const ListItem = ({ item }) => {
   const meta = useSelector((state) =>
@@ -46,19 +46,10 @@ const ListItem = ({ item }) => {
 };
 
 const Wallet = ({ user }) => {
-  const dispatch = useDispatch();
   const walletRef = doc(db, "wallets", user.uid);
   const [wallet, loading, error] = useDocumentData(walletRef, {});
 
-  useEffect(() => {
-    if (error) {
-      dispatch(showFlash({ message: error.message, type: "error" }));
-    }
-
-    return () => {
-      dispatch(clearFlash());
-    };
-  }, [error, dispatch]);
+  useFlashMessage(error);
 
   const summary = useMemo(() => {
     if (!wallet) return [];
@@ -89,9 +80,14 @@ const Wallet = ({ user }) => {
           </div>
         ) : (
           <div className="p-4 rounded-lg bg-slate-200 dark:bg-slate-800">
-            {summary.map((item) => (
-              <ListItem key={item.name} item={item} />
-            ))}
+            {summary.length > 0 ? (
+              summary.map((item) => <ListItem key={item.name} item={item} />)
+            ) : (
+              <div className="flex flex-col items-center justify-center p-8 text-slate-500 dark:text-slate-400 text-center">
+                <p className="text-3xl">😞</p>
+                <p>No wallet information to display</p>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -7,7 +7,7 @@ const Avatar = ({ symbol }) => {
   const meta = useSelector((state) => coinsSelectors.selectById(state, symbol));
 
   return (
-    <div className="relative h-8 w-8 rounded-full border border-slate-500 dark:border-white">
+    <div className="relative h-8 w-8 rounded-full">
       {meta && (
         <Image
           src={meta.logo}

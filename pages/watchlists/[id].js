@@ -4,7 +4,6 @@ import { IncreaseIcon } from "@moon/common/Icons";
 import Layout from "@moon/common/Layout";
 import Spinner from "@moon/common/Spinner";
 import { coinsSelectors } from "@moon/features/Coins/coinsSlice";
-import { clearFlash, showFlash } from "@moon/features/Flash/flashSlice";
 import Transactions from "@moon/features/Transactions";
 import CreateModal from "@moon/features/Transactions/components/CreateModal";
 import { formatMoney } from "@moon/utils/formatMoney";

@@ -1,38 +1,22 @@
 import React, { useState, useRef } from "react";
-import { LoginIcon } from "@heroicons/react/outline";
 import { useForm } from "react-hook-form";
-import { signInWithEmailAndPassword } from "firebase/auth";
 
 import Modal from "@moon/common/Modal";
 import Input from "@moon/common/Input";
-import { auth, db } from "@moon/app/firebase";
-import { useDispatch, useSelector } from "react-redux";
+import { db } from "@moon/app/firebase";
+import { useSelector } from "react-redux";
 import Button from "@moon/common/Button";
 import { CurrencyDollarIcon } from "@heroicons/react/solid";
-import {
-  addDoc,
-  collection,
-  doc,
-  setDoc,
-  Timestamp,
-  updateDoc,
-} from "firebase/firestore";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
+import Alert from "@moon/common/Alert";
 
 const CreateModal = ({ coin }) => {
-  const dispatch = useDispatch();
   const modalRef = useRef();
   const transactionType = useRef("buy");
   const user = useSelector((state) => state.auth.user);
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const {
-    reset,
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitted },
-    watch,
-    setValue,
-  } = useForm({
+  const { reset, register, handleSubmit, watch, setValue } = useForm({
     defaultValues: {
       uid: user.uid,
       price: coin.quote.USD.price,
@@ -41,6 +25,7 @@ const CreateModal = ({ coin }) => {
       transaction_type: "buy",
     },
   });
+
   transactionType.current = watch("transaction_type", "buy");
 
   const onSubmit = async (data) => {
@@ -80,6 +65,7 @@ const CreateModal = ({ coin }) => {
     >
       <>
         <div className="flex bg-slate-300 dark:bg-slate-900 border border-slate-400 dark:border-slate-800 p-2 rounded-lg my-4">
+          {error && <Alert message={error} />}
           <Button
             color={transactionType.current === "buy" ? "primary" : "default"}
             className="w-full mr-1"
@@ -112,7 +98,9 @@ const CreateModal = ({ coin }) => {
             {...register("transaction_id", { required: "Required" })}
           />
           <div className="mt-4 flex justify-end">
-            <Button color="primary">Submit</Button>
+            <Button color="primary" disabled={submitting}>
+              Submit
+            </Button>
           </div>
         </form>
       </>

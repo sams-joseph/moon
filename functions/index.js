@@ -62,6 +62,7 @@ exports.updateCoinInfo = functions.pubsub
       });
   });
 
+// Update or Create the users wallet when a transaction is created
 exports.updateSummary = functions.firestore
   .document("transactions/{transactionId}")
   .onCreate(async (snap, context) => {
