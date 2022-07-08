@@ -109,7 +109,7 @@ const Transactions = ({ coin, meta }) => {
           <h2 className="text-lg">Transactions</h2>
         </div>
       </div>
-      <div className="p-4 bg-slate-800">
+      <div className="p-4 bg-slate-200 dark:bg-slate-800">
         <Line options={options} data={data} />
       </div>
       <div className="grid grid-cols-3 p-4 border-b border-slate-300 dark:border-slate-700 text-sm items-center">
