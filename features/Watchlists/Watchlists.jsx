@@ -9,6 +9,7 @@ import { Switch } from "@headlessui/react";
 import { useSelector } from "react-redux";
 import Spinner from "@moon/common/Spinner";
 import useFlashMessage from "@moon/hooks/useFlashMessage";
+import CreateModal from "./components/CreateModal";
 
 const WatchlistItem = ({ data, id }) => {
   return (
@@ -56,28 +57,31 @@ const Watchlists = (props) => {
   return (
     <div>
       {isAuthenticated && (
-        <div className="p-1 xl:p-4 flex justify-center xl:justify-start items-center">
-          <Switch
-            checked={own}
-            onChange={handleOwnChange}
-            className={`${
-              own
-                ? "bg-purple-500 dark:bg-purple-500"
-                : "bg-slate-200 dark:bg-slate-600"
-            } relative inline-flex h-[24px] w-[52px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mr-4`}
-          >
-            <span className="sr-only">Own Only</span>
-            <span
-              aria-hidden="true"
+        <div className="flex items-center justify-between p-4 border-b border-slate-300 dark:border-slate-700">
+          <div className="flex justify-center xl:justify-start items-center">
+            <Switch
+              checked={own}
+              onChange={handleOwnChange}
               className={`${
                 own
-                  ? "translate-x-7 bg-yellow-300"
-                  : "translate-x-0 bg-yellow-600"
-              }
+                  ? "bg-purple-500 dark:bg-purple-500"
+                  : "bg-slate-200 dark:bg-slate-600"
+              } relative inline-flex h-[24px] w-[52px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 mr-4`}
+            >
+              <span className="sr-only">Own Only</span>
+              <span
+                aria-hidden="true"
+                className={`${
+                  own
+                    ? "translate-x-7 bg-yellow-300"
+                    : "translate-x-0 bg-yellow-600"
+                }
       pointer-events-none h-[20px] w-[20px] transform rounded-full dark:bg-white shadow-lg ring-0 transition duration-200 ease-in-out inline-flex items-center justify-center`}
-            />
-          </Switch>
-          <span className="text-sm opacity-75">Own only</span>
+              />
+            </Switch>
+            <span className="text-sm opacity-75">Own only</span>
+          </div>
+          {isAuthenticated && <CreateModal />}
         </div>
       )}
       {loading ? (

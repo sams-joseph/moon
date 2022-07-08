@@ -44,7 +44,7 @@ const Transactions = ({ coin, meta }) => {
           <h2 className="text-lg">Transactions</h2>
         </div>
       </div>
-      <div className="grid grid-cols-3 p-4 border-b border-slate-300 dark:border-slate-600 text-sm items-center">
+      <div className="grid grid-cols-3 p-4 border-b border-slate-300 dark:border-slate-700 text-sm items-center">
         <div className="flex items-center">
           <div className="relative h-8 w-8 mr-2 opacity-50">
             <Image

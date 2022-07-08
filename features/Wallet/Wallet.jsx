@@ -2,31 +2,18 @@ import React, { useMemo } from "react";
 import { db } from "@moon/app/firebase";
 import { doc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { useSelector } from "react-redux";
 import Spinner from "@moon/common/Spinner";
 import { formatMoney } from "@moon/utils/formatMoney";
-import { coinsSelectors } from "../Coins/coinsSlice";
 import Image from "next/image";
 import flameIcon from "@moon/assets/images/flame--icon.png";
 import useFlashMessage from "@moon/hooks/useFlashMessage";
+import Avatar from "@moon/common/Avatar";
 
 const ListItem = ({ item }) => {
-  const meta = useSelector((state) =>
-    coinsSelectors.selectById(state, item.name)
-  );
-
   return (
     <div className="flex flex-col justify-center pb-4 last:pb-0 border-b border-slate-300 dark:border-slate-600 last:border-none mb-4">
       <div className="flex-1 mb-2 flex items-center">
-        <div className="relative h-6 w-6 rounded-full overflow-hidden mr-4">
-          <Image
-            src={meta.logo}
-            layout="fill"
-            objectFit="cover"
-            objectPosition="center"
-            alt={item.name}
-          />
-        </div>
+        <Avatar symbol={item.name} height="6" width="6" gutterRight />
         <h2 className="text-lg capitalize">{item.name}</h2>
       </div>
       <div className="flex-1 flex items-center justify-between">
