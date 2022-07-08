@@ -37,11 +37,7 @@ const Watchlist = () => {
         <div className="py-8">
           <header className="p-4">
             <h1 className="text-[30px] capitalize">{watchlist.name}</h1>
-            <p className="mb-6 text-slate-500">{`${
-              watchlist.created_by.name
-            } | ${dayjs(watchlist.created_at.toDate().toString()).format(
-              "MMM DD YYYY"
-            )}`}</p>
+            <p className="mb-6 text-slate-500">{`${watchlist.created_by.name}`}</p>
             <p>{watchlist.description}</p>
           </header>
           <div className="flex p-4 border-b border-slate-300 dark:border-slate-700 text-sm items-center justify-between">

@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { formatMoney } from "@moon/utils/formatMoney";
 import Image from "next/image";
-
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
 import emoji from "@moon/assets/images/emoji--icon.png";
 import increase from "@moon/assets/images/increase--icon.png";
 import decrease from "@moon/assets/images/decrease--icon.png";
@@ -12,6 +22,29 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import dayjs from "dayjs";
 import Spinner from "@moon/common/Spinner";
 import useFlashMessage from "@moon/hooks/useFlashMessage";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+export const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top",
+    },
+    title: {
+      display: true,
+      text: "Transactions Chart",
+    },
+  },
+};
 
 const Transactions = ({ coin, meta }) => {
   const user = useSelector((state) => state.auth.user);
@@ -25,6 +58,38 @@ const Transactions = ({ coin, meta }) => {
   const [transactions, loading, error] = useCollectionData(q);
 
   useFlashMessage(error);
+
+  const labels = useMemo(() => {
+    const data = new Set();
+    if (transactions) {
+      transactions.forEach((t) => {
+        data.add(dayjs(t.created_at.toDate().toString()).format("MM/DD/YYYY"));
+      });
+    }
+
+    return Array.from(data);
+  }, [transactions]);
+
+  const data = useMemo(() => {
+    if (labels && transactions) {
+      return {
+        labels,
+        datasets: [
+          {
+            label: "Transactions",
+            data: transactions.map((t) => t.amount),
+            borderColor: "#9333ea",
+            backgroundColor: "#9333ea",
+          },
+        ],
+      };
+    } else {
+      return {
+        labels: [],
+        datasets: [],
+      };
+    }
+  }, [labels, transactions]);
 
   if (!coin || !meta) return null;
 
@@ -43,6 +108,9 @@ const Transactions = ({ coin, meta }) => {
           </div>
           <h2 className="text-lg">Transactions</h2>
         </div>
+      </div>
+      <div className="p-4 bg-slate-800">
+        <Line options={options} data={data} />
       </div>
       <div className="grid grid-cols-3 p-4 border-b border-slate-300 dark:border-slate-700 text-sm items-center">
         <div className="flex items-center">
