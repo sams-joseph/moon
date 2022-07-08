@@ -8,7 +8,7 @@ Transaction and coin tracking application for cypto currencies powered by Coin M
 - Get the average price per coin.
 - Create watchlists for your favorite coins.
 
-![screenshot](https://raw.githubusercontent.com/sams-joseph/moon/main/assets/screenshots/Screen Shot 2022-07-08 at 12.33.34 AM.png)
+![screenshot](https://github.com/sams-joseph/moon/blob/c5be88cabaf22d6c021781f8c595ca1ca35f4675/assets/screenshots/Screen%20Shot%202022-07-08%20at%2012.33.34%20AM.png)
 
 ## Project Roadmap
 
